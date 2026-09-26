@@ -5,7 +5,8 @@ import secrets
 
 destination = Path(__file__).resolve().parents[1] / ".env"
 if destination.exists():
-    raise SystemExit(f"{destination} already exists; leaving it unchanged")
+    print(f"{destination} already exists; leaving it unchanged")
+    raise SystemExit(0)
 
 
 def token(n=32):
