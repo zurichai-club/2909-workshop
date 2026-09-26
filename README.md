@@ -38,6 +38,9 @@ uv run --env-file .env python scripts/production_batch.py
 uv run --env-file .env python scripts/capture_failure.py p2
 ```
 
+Run `uv run python -m unittest discover -s tests -v` to verify trace
+parentage and the authenticated OTLP export request locally.
+
 Every run writes local `traces.jsonl` and exports OTLP spans to Langfuse when
 `.env` is loaded. In Langfuse, open **Traces**, search the trace ID printed by
 the CLI or batch, then inspect the root agent span, two model spans and tool
