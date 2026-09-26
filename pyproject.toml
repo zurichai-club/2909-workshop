@@ -1,0 +1,18 @@
+[project]
+name = "agent-lifecycle-workshop"
+version = "0.1.0"
+description = "Weather agent lifecycle workshop: evals, mutation testing, tracing and feedback"
+requires-python = ">=3.11"
+dependencies = [
+  "httpx>=0.27,<1",
+  "openai>=1.70,<4",
+  "opentelemetry-api>=1.29,<2",
+  "opentelemetry-sdk>=1.29,<2",
+  "opentelemetry-exporter-otlp-proto-http>=1.29,<2",
+]
+
+[project.optional-dependencies]
+eval = ["deepeval>=3,<4"]
+
+[tool.uv]
+package = false
