@@ -5,7 +5,7 @@ after every change to the agent.
 
 ```bash
 cd exercises/01-golden-set
-uv run python eval_golden.py --deepeval
+uv run python eval_golden.py
 ```
 
 ## Files
@@ -13,7 +13,7 @@ uv run python eval_golden.py --deepeval
 | File | What it is |
 |---|---|
 | `golden.json` | The three test cases |
-| `eval_golden.py` | Runs each case and checks the tool, its arguments and the answer |
+| `eval_golden.py` | Turns each case into a DeepEval test case and checks it with two metrics |
 | `weather_agent/agent.py` | The agent. `mock_plan` and `mock_answer` stand in for the LLM |
 | `weather_agent/tools.py` | The `get_forecast` tool (recorded data in `weather_agent/forecast.json`) |
 | `ask.py` | Ask one question: `uv run python ask.py "Will it rain in Oslo today?"` |
@@ -22,9 +22,15 @@ Each case in `golden.json` lists the expected tool, `expected_city`, a
 `date_offset` in days from today (so the case still works next week), and words
 the answer must contain (`answer_contains`).
 
+`eval_golden.py` uses two DeepEval metrics. Neither needs an LLM or an API key:
+
+- `ToolCorrectnessMetric`: the right tool, with exactly the expected city and
+  date. When no tool is expected, calling one fails.
+- `PatternMatchMetric`: the answer contains each `answer_contains` text.
+
 ## Task
 
-1. Read `golden.json` and the `check` function in `eval_golden.py`.
+1. Read `golden.json`, then `to_test_case` and `run_golden_set` in `eval_golden.py`.
 2. Add three cases of your own:
    - an ambiguous city (for example, "Paris"),
    - a missing location,
@@ -33,9 +39,7 @@ the answer must contain (`answer_contains`).
    When the agent should ask a clarifying question, leave out `expected_tool`,
    `expected_city` and `date_offset`. Put words from the clarification in
    `answer_contains`.
-3. Run the suite again. Compare our checks with DeepEval's tool correctness
-   report. DeepEval only sees tool *names*. Our checks also cover the arguments
-   and the answer.
+3. Run the suite again. Which metric fails for each new case, and why?
 
 The mock model only knows Berlin, Zurich and Oslo. For other cities, use a real
 model (`ask.py --model openai`, see the main README) or extend `mock_plan`.
