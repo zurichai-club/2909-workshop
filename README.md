@@ -1,106 +1,80 @@
 # Closing the Loop: weather agent workshop
 
-This is a separate repository inside `workshop/`. It copies and adapts the
-parent project's `example_agent` interface. The parent project, proxy and
-telemetry packages are not needed here. The workshop agent has **one** tool,
-`get_forecast(city, date)`, which calls Open-Meteo for live forecasts. Recorded,
-illustrative data and a deterministic model make every exercise runnable without
-API credentials.
+A tiny weather agent with **one** tool, `get_forecast(city, date)`, and five
+exercises about evaluating it: golden sets, mutation testing, traces, turning a
+production failure into a test, and (optional) an LLM judge.
+
+Each exercise is a **self-contained folder** in `exercises/`. It has its own copy
+of the agent (`weather_agent/`), its own data and its own README. Just `cd` into
+the folder, no git checkouts. Each folder starts where the previous exercise
+ended, and each README ends with a solution.
+
+| # | Folder | You learn |
+|---|---|---|
+| 1 | [`01-golden-set`](exercises/01-golden-set) | Write golden cases and check tool calls, arguments and answers |
+| 2 | [`02-mutation-testing`](exercises/02-mutation-testing) | Break the agent on purpose to find gaps in the tests |
+| 3 | [`03-observability`](exercises/03-observability) | Find a failure in Langfuse traces |
+| 4 | [`04-close-the-loop`](exercises/04-close-the-loop) | Turn that trace into a golden case, then fix the agent |
+| 5 | [`05-llm-judge`](exercises/05-llm-judge) | Optional: a local LLM judge, sped up with a shared KV cache |
+
+By default the agent uses a **mock model** (a few rules in
+`weather_agent/agent.py`) and **recorded forecasts**, so every run is repeatable
+and needs no API key.
 
 ## Setup
 
-Requirements: Python 3.11+, `uv`, Docker Compose for Langfuse, and enough memory
-for Langfuse's Postgres, ClickHouse, Redis, MinIO, web and worker services.
+Requirements: Python 3.11+, `uv`, and Docker Compose for Langfuse (exercise 3).
 
 ```bash
 cd workshop
 uv sync --extra eval
-python3 scripts/setup_env.py
-docker compose up -d
+python3 scripts/setup_env.py      # creates an ignored .env with local passwords and keys
+docker compose up -d              # Langfuse at http://127.0.0.1:3000
 uv run --env-file .env python scripts/check_setup.py
 ```
 
-`setup_env.py` creates an ignored `.env` once. Langfuse will be at
-<http://127.0.0.1:3000>. Sign in as `workshop@example.com` with the
-`LANGFUSE_INIT_USER_PASSWORD` value from `.env`. The project and OTLP keys are
-created automatically. The first startup can take a few minutes. Compose
-binds only the Langfuse UI and MinIO media endpoint to localhost; database
-ports stay private to its Docker network.
+Sign in to Langfuse as `workshop@example.com` with the
+`LANGFUSE_INIT_USER_PASSWORD` value from `.env`. The first start can take a few
+minutes. Only the Langfuse UI and the MinIO media endpoint are exposed, both
+bound to localhost.
 
-## Run
+Try the agent:
 
 ```bash
-uv run --env-file .env python example_agent/example.py
-uv run --env-file .env python example_agent/cli.py "Do I need an umbrella in Berlin tomorrow?"
-uv run --env-file .env python scripts/eval_golden.py --deepeval
-uv run --env-file .env python scripts/mutate.py
-uv run --env-file .env python scripts/production_batch.py
-uv run --env-file .env python scripts/capture_failure.py p2
+cd exercises/01-golden-set
+uv run python ask.py "Do I need an umbrella in Berlin tomorrow?"
 ```
 
-Run `uv run python -m unittest discover -s tests -v` to verify trace
-parentage and the authenticated OTLP export request locally.
+## A real model and live weather
 
-Every run writes local `traces.jsonl` and exports OTLP spans to Langfuse when
-`.env` is loaded. In Langfuse, open **Traces**, search the trace ID printed by
-the CLI or batch, then inspect the root agent span, two model spans and tool
-span. The batch index in `batch.jsonl` maps query IDs to trace IDs. `p2` is a
-deliberate failure: the user requested Fahrenheit but the mock answer says °C.
-Captured questions and tool outputs are included in traces; use synthetic
-workshop inputs only.
-
-For real model calls and current forecasts, set `OPENAI_API_KEY` and
-`OPENAI_MODEL` in your environment, then run:
+Set `OPENAI_API_KEY` and optionally `OPENAI_MODEL` (default `gpt-4o-mini`), then:
 
 ```bash
-MODEL_MODE=openai uv run --env-file .env python example_agent/cli.py --model openai --live "Do I need an umbrella in Berlin tomorrow?"
+uv run python ask.py --model openai --live "Do I need an umbrella in Berlin tomorrow?"
 ```
 
-An OpenAI-compatible local gateway also works with `OPENAI_BASE_URL`; its
-model must support tool calling. Live Open-Meteo needs network access. The
-recorded fixture is intentionally illustrative and should never be used as
-weather advice.
+An OpenAI-compatible gateway also works: set `OPENAI_BASE_URL`. Its model must
+support tool calling. `--live` calls the [Open-Meteo](https://open-meteo.com/en/docs)
+forecast and [geocoding](https://open-meteo.com/en/docs/geocoding-api) APIs. The
+recorded data is illustrative only. Never use it as weather advice.
 
-## Exercises
+## Traces
 
-1. [Golden cases](exercises/01-golden.md) — `ex1-start`
-2. [Mutation testing](exercises/02-mutation.md) — `ex2-start`
-3. [Observability](exercises/03-observability.md) — `ex3-start`
-4. [Close the loop](exercises/04-close-loop.md) — `ex4-start`
-5. [Advanced LLM judge and KV cache](exercises/05-advanced-judge.md) — optional `ex5-start`
+Every run appends spans to `traces.jsonl` in the exercise folder. When `.env` is
+loaded (`uv run --env-file ../../.env ...`), spans are also sent to Langfuse over
+[OTLP/HTTP](https://langfuse.com/integrations/native/opentelemetry). Traces
+contain the questions and tool outputs, so use only synthetic workshop inputs.
 
-Each tag is a checkpoint in this nested repository. The `solutions` branch
-adds a unit assertion and a Fahrenheit fix. Return to `main` after exploring
-it. For example, `git checkout ex3-start` starts the tracing exercise.
+## For maintainers
 
-## How this maps to the talk
+```bash
+uv run python -m unittest discover -s tests -v
+```
 
-The offline loop is `fixtures/golden.json` → `scripts/eval_golden.py` →
-`scripts/mutate.py`. The online loop is `scripts/production_batch.py` →
-Langfuse trace inspection. `scripts/capture_failure.py` brings a confirmed
-online failure back into the golden set. DeepEval reports tool correctness;
-plain Python assertions check exact arguments and answer properties.
+The tests run the starting point of every exercise folder, and check trace
+parentage and the authenticated OTLP export request. The agent is copied on
+purpose, so a change to it must be made in every folder that needs it.
 
-The local stack follows [Langfuse's Docker Compose deployment](https://langfuse.com/self-hosting/deployment/docker-compose)
-and sends authenticated [OTLP/HTTP spans](https://langfuse.com/integrations/native/opentelemetry).
-The tool uses the [Open-Meteo forecast](https://open-meteo.com/en/docs) and
-[geocoding](https://open-meteo.com/en/docs/geocoding-api) APIs.
-
-The optional fifth exercise scores the YES and NO next-token probabilities for
-ten trace questions on a local MLX model. It benchmarks full prompt processing
-against a precomputed shared prefix, while keeping the original four exercises
-and their checkpoint tags unchanged. Install it with
-`uv sync --extra eval --extra mlx`; it requires Apple Silicon and a working
-Metal device.
-The [local 7B token probability benchmark](results/judge_token_probabilities.json)
-measured 10.57 s cold versus 1.34 s with cache reuse for ten judgments
-(7.89×), with virtually identical percentages. The report provides both raw
-full-vocabulary probabilities and YES/NO normalized percentages.
-The [warm-cache long-trace comparison](results/judge_long_trace_comparison.json)
-uses an 8,015-token synthetic trace-shaped prefix: ten judgments took 117.67 s
-cold, 11.40 s for the first cached batch including prefill, and 0.67 s for a
-later batch with the cache already warm.
-
-To stop without deleting traces: `docker compose stop`. To restart:
-`docker compose up -d`. Only use `docker compose down -v` when you intend to
-delete this workshop's saved Langfuse data.
+To stop Langfuse without deleting traces: `docker compose stop`. Only run
+`docker compose down -v` if you want to delete this workshop's Langfuse data.
+The stack follows [Langfuse's Docker Compose deployment](https://langfuse.com/self-hosting/deployment/docker-compose).

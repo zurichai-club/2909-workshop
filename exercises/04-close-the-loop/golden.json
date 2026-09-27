@@ -1,0 +1,5 @@
+[
+  {"id": "berlin-rain", "input": "Do I need an umbrella in Berlin tomorrow?", "expected_tool": "get_forecast", "expected_city": "Berlin, Germany", "date_offset": 1, "answer_contains": ["Berlin", "take an umbrella", "°C"]},
+  {"id": "zurich-rain", "input": "Will it rain in Zurich tomorrow?", "expected_tool": "get_forecast", "expected_city": "Zurich, Switzerland", "date_offset": 1, "answer_contains": ["Zurich", "umbrella is probably unnecessary"]},
+  {"id": "beyond-horizon", "input": "Will it rain in Berlin three weeks from now?", "expected_tool": "get_forecast", "expected_city": "Berlin, Germany", "date_offset": 21, "answer_contains": ["outside the available 16-day forecast horizon"]}
+]

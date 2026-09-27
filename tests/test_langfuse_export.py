@@ -41,7 +41,7 @@ class LangfuseExportTest(unittest.TestCase):
                        LANGFUSE_PUBLIC_KEY="pk-lf-test", LANGFUSE_SECRET_KEY="sk-lf-test",
                        TRACE_FILE="")
             subprocess.run(
-                [str(ROOT / ".venv" / "bin" / "python"), str(ROOT / "example_agent" / "cli.py"),
+                [str(ROOT / ".venv" / "bin" / "python"), str(ROOT / "exercises" / "03-observability" / "ask.py"),
                  "Do I need an umbrella in Berlin tomorrow?"],
                 cwd=ROOT, env=env, capture_output=True, text=True, check=True,
             )

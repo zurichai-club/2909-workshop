@@ -18,7 +18,7 @@ class TracePipelineTest(unittest.TestCase):
             env.pop("LANGFUSE_PUBLIC_KEY", None)
             env.pop("LANGFUSE_SECRET_KEY", None)
             completed = subprocess.run(
-                [str(ROOT / ".venv" / "bin" / "python"), str(ROOT / "example_agent" / "cli.py"),
+                [str(ROOT / ".venv" / "bin" / "python"), str(ROOT / "exercises" / "03-observability" / "ask.py"),
                  "Do I need an umbrella in Berlin tomorrow?"],
                 cwd=ROOT, env=env, capture_output=True, text=True, check=True,
             )
