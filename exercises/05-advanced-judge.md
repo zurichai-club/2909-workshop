@@ -16,6 +16,8 @@ Apple Silicon with a working Metal device is required. The default model is
 `mlx-community/Qwen2.5-7B-Instruct-4bit`, a roughly 4.3 GB download. The model
 stays in this workshop's ignored `.cache/` directory. Docker and model API
 keys are not required for this exercise.
+Run the command before the workshop: the first model download took about
+17 minutes on this connection, while later runs loaded it from local cache.
 
 ```bash
 uv sync --extra eval --extra mlx
