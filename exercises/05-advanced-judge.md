@@ -1,5 +1,7 @@
 # Optional exercise 5 — LLM as a judge with a shared KV cache
 
+Checkpoint: `git checkout ex5-start` (create your own branch before editing).
+
 This builds on Exercise 3's flagged `p2` trace. It uses a local MLX model to
 answer ten yes/no questions about the same trace. The questions cover tool use,
 arguments, grounding, source, and whether the final answer met the user's

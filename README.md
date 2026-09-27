@@ -67,7 +67,7 @@ weather advice.
 2. [Mutation testing](exercises/02-mutation.md) — `ex2-start`
 3. [Observability](exercises/03-observability.md) — `ex3-start`
 4. [Close the loop](exercises/04-close-loop.md) — `ex4-start`
-5. [Advanced LLM judge and KV cache](exercises/05-advanced-judge.md) — optional extension
+5. [Advanced LLM judge and KV cache](exercises/05-advanced-judge.md) — optional `ex5-start`
 
 Each tag is a checkpoint in this nested repository. The `solutions` branch
 adds a unit assertion and a Fahrenheit fix. Return to `main` after exploring
