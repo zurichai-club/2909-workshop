@@ -86,14 +86,16 @@ and sends authenticated [OTLP/HTTP spans](https://langfuse.com/integrations/nati
 The tool uses the [Open-Meteo forecast](https://open-meteo.com/en/docs) and
 [geocoding](https://open-meteo.com/en/docs/geocoding-api) APIs.
 
-The optional fifth exercise runs ten yes/no trace judgments on a local MLX
-model. It benchmarks full prompt processing against a precomputed shared
-prefix, while keeping the original four exercises and their checkpoint tags
-unchanged. Install it with `uv sync --extra eval --extra mlx`; it requires
-Apple Silicon and a working Metal device.
-The [local 7B benchmark](results/judge_kv_cache.json) measured 11.06 s cold
-versus 2.35 s with cache reuse for ten judgments (4.71×), with matching
-answers on this workshop trace.
+The optional fifth exercise scores the YES and NO next-token probabilities for
+ten trace questions on a local MLX model. It benchmarks full prompt processing
+against a precomputed shared prefix, while keeping the original four exercises
+and their checkpoint tags unchanged. Install it with
+`uv sync --extra eval --extra mlx`; it requires Apple Silicon and a working
+Metal device.
+The [local 7B token probability benchmark](results/judge_token_probabilities.json)
+measured 10.57 s cold versus 1.34 s with cache reuse for ten judgments
+(7.89×), with virtually identical percentages. The report provides both raw
+full-vocabulary probabilities and YES/NO normalized percentages.
 
 To stop without deleting traces: `docker compose stop`. To restart:
 `docker compose up -d`. Only use `docker compose down -v` when you intend to
