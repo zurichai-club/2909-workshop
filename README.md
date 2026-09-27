@@ -96,6 +96,10 @@ The [local 7B token probability benchmark](results/judge_token_probabilities.jso
 measured 10.57 s cold versus 1.34 s with cache reuse for ten judgments
 (7.89×), with virtually identical percentages. The report provides both raw
 full-vocabulary probabilities and YES/NO normalized percentages.
+The [warm-cache long-trace comparison](results/judge_long_trace_comparison.json)
+uses an 8,015-token synthetic trace-shaped prefix: ten judgments took 117.67 s
+cold, 11.40 s for the first cached batch including prefill, and 0.67 s for a
+later batch with the cache already warm.
 
 To stop without deleting traces: `docker compose stop`. To restart:
 `docker compose up -d`. Only use `docker compose down -v` when you intend to

@@ -1,0 +1,1171 @@
+{
+  "created_at": "2026-09-27T08:50:38.732379+00:00",
+  "method": "Single process and one GPU-resident model; each scenario prefilled its shared cache once after warm-up and kept it alive across timed rounds. Per-question cache copies are timed. The long trace adds synthetic trace-shaped context to the same recorded p2 case.",
+  "model_load_seconds": 0.6671319169981871,
+  "scenarios": {
+    "short": {
+      "created_at": "2026-09-27T08:46:19.213504+00:00",
+      "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+      "source_query_id": "p2",
+      "source_trace_id": "b54f086c9ed66ac387f13c6572f2a8ad",
+      "mlx_lm_version": "0.31.3",
+      "mlx_version": "0.32.2",
+      "platform": "macOS-26.7-arm64-arm-64bit-Mach-O",
+      "model_load_seconds": 0.0,
+      "peak_process_memory_gb": 5.315947612,
+      "execution_device": "Device(gpu, 0)",
+      "synthetic_trace_spans": 0,
+      "shared_cache_kept_warm_across_rounds": true,
+      "shared_prefill_seconds_once": 0.8503572500048904,
+      "shared_cache_gb": 0.058720256,
+      "active_memory_after_prefill_gb": 4.34622772,
+      "label_token_ids": {
+        "YES": 14004,
+        "NO": 8996
+      },
+      "shared_prefix_tokens": 860,
+      "full_prompt_tokens": [
+        874,
+        877,
+        875,
+        877,
+        881,
+        880,
+        880,
+        880,
+        879,
+        875
+      ],
+      "tail_tokens": [
+        14,
+        17,
+        15,
+        17,
+        21,
+        20,
+        20,
+        20,
+        19,
+        15
+      ],
+      "rounds": [
+        {
+          "round": 1,
+          "order": [
+            "cold",
+            "cached"
+          ],
+          "cold": {
+            "total_seconds": 10.700482749998628,
+            "prefill_seconds": 0.0,
+            "rows": [
+              {
+                "id": "requested_fahrenheit",
+                "question": "Did the user explicitly request Fahrenheit?",
+                "expected": "YES",
+                "raw_yes_pct": 98.56350421905518,
+                "raw_no_pct": 0.1528881024569273,
+                "other_token_pct": 1.283607678487897,
+                "yes_pct_given_yes_or_no": 99.84524250030518,
+                "no_pct_given_yes_or_no": 0.1548763015307486,
+                "choice": "YES",
+                "seconds": 0.9858310410054401
+              },
+              {
+                "id": "answered_fahrenheit",
+                "question": "Did the final answer give the temperature in Fahrenheit?",
+                "expected": "NO",
+                "raw_yes_pct": 0.00033404992336727446,
+                "raw_no_pct": 99.99847412109375,
+                "other_token_pct": 0.0011918289828827255,
+                "yes_pct_given_yes_or_no": 0.00033405376598238945,
+                "no_pct_given_yes_or_no": 99.99961256980896,
+                "choice": "NO",
+                "seconds": 1.001697083003819
+              },
+              {
+                "id": "called_forecast",
+                "question": "Did the agent call get_forecast?",
+                "expected": "YES",
+                "raw_yes_pct": 99.46698546409607,
+                "raw_no_pct": 1.0191829602490543e-05,
+                "other_token_pct": 0.5330043440743282,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 1.0246444048789272e-05,
+                "choice": "YES",
+                "seconds": 1.0148366249995888
+              },
+              {
+                "id": "city_berlin",
+                "question": "Was the forecast tool called for Berlin, Germany?",
+                "expected": "YES",
+                "raw_yes_pct": 99.82353448867798,
+                "raw_no_pct": 3.741379828170466e-05,
+                "other_token_pct": 0.17642809752373978,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 3.747993559954921e-05,
+                "choice": "YES",
+                "seconds": 1.0407954580005025
+              },
+              {
+                "id": "temperature_14c",
+                "question": "Did the tool return a maximum temperature of 14 °C?",
+                "expected": "YES",
+                "raw_yes_pct": 95.26609182357788,
+                "raw_no_pct": 4.597092047333717,
+                "other_token_pct": 0.1368161290884018,
+                "yes_pct_given_yes_or_no": 95.39664387702942,
+                "no_pct_given_yes_or_no": 4.603392258286476,
+                "choice": "YES",
+                "seconds": 1.0604488750032033
+              },
+              {
+                "id": "rain_over_90",
+                "question": "Did the tool return a precipitation probability above 90%?",
+                "expected": "NO",
+                "raw_yes_pct": 7.123021061872237e-08,
+                "raw_no_pct": 99.99809265136719,
+                "other_token_pct": 0.0019072774026018813,
+                "yes_pct_given_yes_or_no": 7.123156509081241e-08,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 1.0803138339979341
+              },
+              {
+                "id": "answer_70_percent",
+                "question": "Did the final answer mention a 70% precipitation probability?",
+                "expected": "YES",
+                "raw_yes_pct": 99.77404475212097,
+                "raw_no_pct": 2.9582076876977226e-05,
+                "other_token_pct": 0.22592566580215134,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 2.964906968827563e-05,
+                "choice": "YES",
+                "seconds": 1.1043516249992535
+              },
+              {
+                "id": "live_source",
+                "question": "Was the tool output from a live Open-Meteo call?",
+                "expected": "NO",
+                "raw_yes_pct": 1.1627877827269373e-08,
+                "raw_no_pct": 99.99694228172302,
+                "other_token_pct": 0.0030577066491010996,
+                "yes_pct_given_yes_or_no": 1.1628233098637253e-08,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 1.1204055410053115
+              },
+              {
+                "id": "satisfied_units",
+                "question": "Did the final answer satisfy the user's requested temperature units?",
+                "expected": "NO",
+                "raw_yes_pct": 3.866952908992971e-05,
+                "raw_no_pct": 99.99961256980896,
+                "other_token_pct": 0.00034876066195010935,
+                "yes_pct_given_yes_or_no": 3.866967688281875e-05,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 1.1367075419984758
+              },
+              {
+                "id": "tool_error",
+                "question": "Did the forecast tool return an error?",
+                "expected": "NO",
+                "raw_yes_pct": 9.198198452908812e-09,
+                "raw_no_pct": 99.99465346336365,
+                "other_token_pct": 0.00534652743815478,
+                "yes_pct_given_yes_or_no": 9.198689726597209e-09,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 1.1550686250047875
+              }
+            ]
+          },
+          "cached": {
+            "total_seconds": 0.4750027920017601,
+            "prefill_seconds": 0.0,
+            "rows": [
+              {
+                "id": "requested_fahrenheit",
+                "question": "Did the user explicitly request Fahrenheit?",
+                "expected": "YES",
+                "raw_yes_pct": 98.60223531723022,
+                "raw_no_pct": 0.15294819604605436,
+                "other_token_pct": 1.244816486723721,
+                "yes_pct_given_yes_or_no": 99.84524250030518,
+                "no_pct_given_yes_or_no": 0.1548763015307486,
+                "choice": "YES",
+                "seconds": 0.05049699999653967
+              },
+              {
+                "id": "answered_fahrenheit",
+                "question": "Did the final answer give the temperature in Fahrenheit?",
+                "expected": "NO",
+                "raw_yes_pct": 0.0003138108922939864,
+                "raw_no_pct": 99.99847412109375,
+                "other_token_pct": 0.0012120680139560136,
+                "yes_pct_given_yes_or_no": 0.0003138144847980584,
+                "no_pct_given_yes_or_no": 99.99961256980896,
+                "choice": "NO",
+                "seconds": 0.047043625003425404
+              },
+              {
+                "id": "called_forecast",
+                "question": "Did the agent call get_forecast?",
+                "expected": "YES",
+                "raw_yes_pct": 99.46698546409607,
+                "raw_no_pct": 9.878259987772253e-06,
+                "other_token_pct": 0.5330046576439429,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 9.93119400050091e-06,
+                "choice": "YES",
+                "seconds": 0.04728325000178302
+              },
+              {
+                "id": "city_berlin",
+                "question": "Was the forecast tool called for Berlin, Germany?",
+                "expected": "YES",
+                "raw_yes_pct": 99.82353448867798,
+                "raw_no_pct": 3.800298031819693e-05,
+                "other_token_pct": 0.1764275083417033,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 3.807016071277758e-05,
+                "choice": "YES",
+                "seconds": 0.04656579100264935
+              },
+              {
+                "id": "temperature_14c",
+                "question": "Did the tool return a maximum temperature of 14 °C?",
+                "expected": "YES",
+                "raw_yes_pct": 95.26209235191345,
+                "raw_no_pct": 4.596899077296257,
+                "other_token_pct": 0.14100857079029083,
+                "yes_pct_given_yes_or_no": 95.39664387702942,
+                "no_pct_given_yes_or_no": 4.603392258286476,
+                "choice": "YES",
+                "seconds": 0.04717441699904157
+              },
+              {
+                "id": "rain_over_90",
+                "question": "Did the tool return a precipitation probability above 90%?",
+                "expected": "NO",
+                "raw_yes_pct": 7.012588287835797e-08,
+                "raw_no_pct": 99.99809265136719,
+                "other_token_pct": 0.0019072785069296216,
+                "yes_pct_given_yes_or_no": 7.012722624821777e-08,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.04687033300433541
+              },
+              {
+                "id": "answer_70_percent",
+                "question": "Did the final answer mention a 70% precipitation probability?",
+                "expected": "YES",
+                "raw_yes_pct": 99.77404475212097,
+                "raw_no_pct": 2.912344996275351e-05,
+                "other_token_pct": 0.22592612442906557,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 2.9189405381657707e-05,
+                "choice": "YES",
+                "seconds": 0.046676749996549916
+              },
+              {
+                "id": "live_source",
+                "question": "Was the tool output from a live Open-Meteo call?",
+                "expected": "NO",
+                "raw_yes_pct": 1.1627877827269373e-08,
+                "raw_no_pct": 99.99694228172302,
+                "other_token_pct": 0.0030577066491010996,
+                "yes_pct_given_yes_or_no": 1.1628233098637253e-08,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.04743895900173811
+              },
+              {
+                "id": "satisfied_units",
+                "question": "Did the final answer satisfy the user's requested temperature units?",
+                "expected": "NO",
+                "raw_yes_pct": 3.9897031456348486e-05,
+                "raw_no_pct": 99.99961256980896,
+                "other_token_pct": 0.0003475331595836906,
+                "yes_pct_given_yes_or_no": 3.989718493357941e-05,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.04770125000504777
+              },
+              {
+                "id": "tool_error",
+                "question": "Did the forecast tool return an error?",
+                "expected": "NO",
+                "raw_yes_pct": 9.198198452908812e-09,
+                "raw_no_pct": 99.99465346336365,
+                "other_token_pct": 0.00534652743815478,
+                "yes_pct_given_yes_or_no": 9.198689726597209e-09,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.04771791600069264
+              }
+            ]
+          }
+        },
+        {
+          "round": 2,
+          "order": [
+            "cached",
+            "cold"
+          ],
+          "cached": {
+            "total_seconds": 0.47129341599793406,
+            "prefill_seconds": 0.0,
+            "rows": [
+              {
+                "id": "requested_fahrenheit",
+                "question": "Did the user explicitly request Fahrenheit?",
+                "expected": "YES",
+                "raw_yes_pct": 98.60223531723022,
+                "raw_no_pct": 0.15294819604605436,
+                "other_token_pct": 1.244816486723721,
+                "yes_pct_given_yes_or_no": 99.84524250030518,
+                "no_pct_given_yes_or_no": 0.1548763015307486,
+                "choice": "YES",
+                "seconds": 0.047290458001953084
+              },
+              {
+                "id": "answered_fahrenheit",
+                "question": "Did the final answer give the temperature in Fahrenheit?",
+                "expected": "NO",
+                "raw_yes_pct": 0.0003138108922939864,
+                "raw_no_pct": 99.99847412109375,
+                "other_token_pct": 0.0012120680139560136,
+                "yes_pct_given_yes_or_no": 0.0003138144847980584,
+                "no_pct_given_yes_or_no": 99.99961256980896,
+                "choice": "NO",
+                "seconds": 0.047162167000351474
+              },
+              {
+                "id": "called_forecast",
+                "question": "Did the agent call get_forecast?",
+                "expected": "YES",
+                "raw_yes_pct": 99.46698546409607,
+                "raw_no_pct": 9.878259987772253e-06,
+                "other_token_pct": 0.5330046576439429,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 9.93119400050091e-06,
+                "choice": "YES",
+                "seconds": 0.046421957995335106
+              },
+              {
+                "id": "city_berlin",
+                "question": "Was the forecast tool called for Berlin, Germany?",
+                "expected": "YES",
+                "raw_yes_pct": 99.82353448867798,
+                "raw_no_pct": 3.800298031819693e-05,
+                "other_token_pct": 0.1764275083417033,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 3.807016071277758e-05,
+                "choice": "YES",
+                "seconds": 0.04676762499730103
+              },
+              {
+                "id": "temperature_14c",
+                "question": "Did the tool return a maximum temperature of 14 °C?",
+                "expected": "YES",
+                "raw_yes_pct": 95.26209235191345,
+                "raw_no_pct": 4.596899077296257,
+                "other_token_pct": 0.14100857079029083,
+                "yes_pct_given_yes_or_no": 95.39664387702942,
+                "no_pct_given_yes_or_no": 4.603392258286476,
+                "choice": "YES",
+                "seconds": 0.04691079100302886
+              },
+              {
+                "id": "rain_over_90",
+                "question": "Did the tool return a precipitation probability above 90%?",
+                "expected": "NO",
+                "raw_yes_pct": 7.012588287835797e-08,
+                "raw_no_pct": 99.99809265136719,
+                "other_token_pct": 0.0019072785069296216,
+                "yes_pct_given_yes_or_no": 7.012722624821777e-08,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.046936083999753464
+              },
+              {
+                "id": "answer_70_percent",
+                "question": "Did the final answer mention a 70% precipitation probability?",
+                "expected": "YES",
+                "raw_yes_pct": 99.77404475212097,
+                "raw_no_pct": 2.912344996275351e-05,
+                "other_token_pct": 0.22592612442906557,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 2.9189405381657707e-05,
+                "choice": "YES",
+                "seconds": 0.04736962499737274
+              },
+              {
+                "id": "live_source",
+                "question": "Was the tool output from a live Open-Meteo call?",
+                "expected": "NO",
+                "raw_yes_pct": 1.1627877827269373e-08,
+                "raw_no_pct": 99.99694228172302,
+                "other_token_pct": 0.0030577066491010996,
+                "yes_pct_given_yes_or_no": 1.1628233098637253e-08,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.04694191699672956
+              },
+              {
+                "id": "satisfied_units",
+                "question": "Did the final answer satisfy the user's requested temperature units?",
+                "expected": "NO",
+                "raw_yes_pct": 3.9897031456348486e-05,
+                "raw_no_pct": 99.99961256980896,
+                "other_token_pct": 0.0003475331595836906,
+                "yes_pct_given_yes_or_no": 3.989718493357941e-05,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.048021583002991974
+              },
+              {
+                "id": "tool_error",
+                "question": "Did the forecast tool return an error?",
+                "expected": "NO",
+                "raw_yes_pct": 9.198198452908812e-09,
+                "raw_no_pct": 99.99465346336365,
+                "other_token_pct": 0.00534652743815478,
+                "yes_pct_given_yes_or_no": 9.198689726597209e-09,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.04744500000379048
+              }
+            ]
+          },
+          "cold": {
+            "total_seconds": 12.203188916995714,
+            "prefill_seconds": 0.0,
+            "rows": [
+              {
+                "id": "requested_fahrenheit",
+                "question": "Did the user explicitly request Fahrenheit?",
+                "expected": "YES",
+                "raw_yes_pct": 98.56350421905518,
+                "raw_no_pct": 0.1528881024569273,
+                "other_token_pct": 1.283607678487897,
+                "yes_pct_given_yes_or_no": 99.84524250030518,
+                "no_pct_given_yes_or_no": 0.1548763015307486,
+                "choice": "YES",
+                "seconds": 1.1919784170022467
+              },
+              {
+                "id": "answered_fahrenheit",
+                "question": "Did the final answer give the temperature in Fahrenheit?",
+                "expected": "NO",
+                "raw_yes_pct": 0.00033404992336727446,
+                "raw_no_pct": 99.99847412109375,
+                "other_token_pct": 0.0011918289828827255,
+                "yes_pct_given_yes_or_no": 0.00033405376598238945,
+                "no_pct_given_yes_or_no": 99.99961256980896,
+                "choice": "NO",
+                "seconds": 1.2216554999977234
+              },
+              {
+                "id": "called_forecast",
+                "question": "Did the agent call get_forecast?",
+                "expected": "YES",
+                "raw_yes_pct": 99.46698546409607,
+                "raw_no_pct": 1.0191829602490543e-05,
+                "other_token_pct": 0.5330043440743282,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 1.0246444048789272e-05,
+                "choice": "YES",
+                "seconds": 1.2256956249984796
+              },
+              {
+                "id": "city_berlin",
+                "question": "Was the forecast tool called for Berlin, Germany?",
+                "expected": "YES",
+                "raw_yes_pct": 99.82353448867798,
+                "raw_no_pct": 3.741379828170466e-05,
+                "other_token_pct": 0.17642809752373978,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 3.747993559954921e-05,
+                "choice": "YES",
+                "seconds": 1.2209805000020424
+              },
+              {
+                "id": "temperature_14c",
+                "question": "Did the tool return a maximum temperature of 14 °C?",
+                "expected": "YES",
+                "raw_yes_pct": 95.26609182357788,
+                "raw_no_pct": 4.597092047333717,
+                "other_token_pct": 0.1368161290884018,
+                "yes_pct_given_yes_or_no": 95.39664387702942,
+                "no_pct_given_yes_or_no": 4.603392258286476,
+                "choice": "YES",
+                "seconds": 1.2188561250004568
+              },
+              {
+                "id": "rain_over_90",
+                "question": "Did the tool return a precipitation probability above 90%?",
+                "expected": "NO",
+                "raw_yes_pct": 7.123021061872237e-08,
+                "raw_no_pct": 99.99809265136719,
+                "other_token_pct": 0.0019072774026018813,
+                "yes_pct_given_yes_or_no": 7.123156509081241e-08,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 1.2096805839973968
+              },
+              {
+                "id": "answer_70_percent",
+                "question": "Did the final answer mention a 70% precipitation probability?",
+                "expected": "YES",
+                "raw_yes_pct": 99.77404475212097,
+                "raw_no_pct": 2.9582076876977226e-05,
+                "other_token_pct": 0.22592566580215134,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 2.964906968827563e-05,
+                "choice": "YES",
+                "seconds": 1.2250892090014531
+              },
+              {
+                "id": "live_source",
+                "question": "Was the tool output from a live Open-Meteo call?",
+                "expected": "NO",
+                "raw_yes_pct": 1.1627877827269373e-08,
+                "raw_no_pct": 99.99694228172302,
+                "other_token_pct": 0.0030577066491010996,
+                "yes_pct_given_yes_or_no": 1.1628233098637253e-08,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 1.2306535000025178
+              },
+              {
+                "id": "satisfied_units",
+                "question": "Did the final answer satisfy the user's requested temperature units?",
+                "expected": "NO",
+                "raw_yes_pct": 3.866952908992971e-05,
+                "raw_no_pct": 99.99961256980896,
+                "other_token_pct": 0.00034876066195010935,
+                "yes_pct_given_yes_or_no": 3.866967688281875e-05,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 1.2330569170007948
+              },
+              {
+                "id": "tool_error",
+                "question": "Did the forecast tool return an error?",
+                "expected": "NO",
+                "raw_yes_pct": 9.198198452908812e-09,
+                "raw_no_pct": 99.99465346336365,
+                "other_token_pct": 0.00534652743815478,
+                "yes_pct_given_yes_or_no": 9.198689726597209e-09,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 1.2255197500053328
+              }
+            ]
+          }
+        }
+      ],
+      "summary": {
+        "cold_median_seconds": 11.45183583349717,
+        "cached_median_seconds_including_prefill": null,
+        "cached_median_seconds_warm": 0.4731481039998471,
+        "cached_median_seconds_amortized_prefill": 0.8983267290022923,
+        "cached_prefill_median_seconds": 0.0,
+        "speedup": 24.203490908421504,
+        "speedup_amortized_prefill": 12.747962922372256,
+        "first_cached_round_seconds_including_one_time_prefill": 1.3253600420066505,
+        "cold_correct": 10,
+        "cached_correct": 10,
+        "max_cold_cached_yes_pct_delta_points": 2.0239281184331048e-05
+      }
+    },
+    "long": {
+      "created_at": "2026-09-27T08:50:38.731235+00:00",
+      "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+      "source_query_id": "p2",
+      "source_trace_id": "b54f086c9ed66ac387f13c6572f2a8ad",
+      "mlx_lm_version": "0.31.3",
+      "mlx_version": "0.32.2",
+      "platform": "macOS-26.7-arm64-arm-64bit-Mach-O",
+      "model_load_seconds": 0.0,
+      "peak_process_memory_gb": 8.797629476,
+      "execution_device": "Device(gpu, 0)",
+      "synthetic_trace_spans": 32,
+      "shared_cache_kept_warm_across_rounds": true,
+      "shared_prefill_seconds_once": 10.725173417005863,
+      "shared_cache_gb": 0.469762048,
+      "active_memory_after_prefill_gb": 4.757269512,
+      "label_token_ids": {
+        "YES": 14004,
+        "NO": 8996
+      },
+      "shared_prefix_tokens": 8015,
+      "full_prompt_tokens": [
+        8029,
+        8032,
+        8030,
+        8032,
+        8036,
+        8035,
+        8035,
+        8035,
+        8034,
+        8030
+      ],
+      "tail_tokens": [
+        14,
+        17,
+        15,
+        17,
+        21,
+        20,
+        20,
+        20,
+        19,
+        15
+      ],
+      "rounds": [
+        {
+          "round": 1,
+          "order": [
+            "cold",
+            "cached"
+          ],
+          "cold": {
+            "total_seconds": 121.55227895799908,
+            "prefill_seconds": 0.0,
+            "rows": [
+              {
+                "id": "requested_fahrenheit",
+                "question": "Did the user explicitly request Fahrenheit?",
+                "expected": "YES",
+                "raw_yes_pct": 98.25004935264587,
+                "raw_no_pct": 9.967815017830617e-07,
+                "other_token_pct": 1.7499496505726242,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 1.0145353890322895e-06,
+                "choice": "YES",
+                "seconds": 12.325404124996567
+              },
+              {
+                "id": "answered_fahrenheit",
+                "question": "Did the final answer give the temperature in Fahrenheit?",
+                "expected": "NO",
+                "raw_yes_pct": 0.05357774789445102,
+                "raw_no_pct": 99.94584321975708,
+                "other_token_pct": 0.0005790323484688997,
+                "yes_pct_given_yes_or_no": 0.053578155348077416,
+                "no_pct_given_yes_or_no": 99.9466061592102,
+                "choice": "NO",
+                "seconds": 13.49109920799674
+              },
+              {
+                "id": "called_forecast",
+                "question": "Did the agent call get_forecast?",
+                "expected": "YES",
+                "raw_yes_pct": 99.83000159263611,
+                "raw_no_pct": 0.00019604699446063023,
+                "other_token_pct": 0.16980236036943097,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 0.00019638082449091598,
+                "choice": "YES",
+                "seconds": 12.11950116600201
+              },
+              {
+                "id": "city_berlin",
+                "question": "Was the forecast tool called for Berlin, Germany?",
+                "expected": "YES",
+                "raw_yes_pct": 99.94164705276489,
+                "raw_no_pct": 0.000643532257527113,
+                "other_token_pct": 0.05770941497758031,
+                "yes_pct_given_yes_or_no": 99.9992311000824,
+                "no_pct_given_yes_or_no": 0.0006439030130422907,
+                "choice": "YES",
+                "seconds": 11.957452457994805
+              },
+              {
+                "id": "temperature_14c",
+                "question": "Did the tool return a maximum temperature of 14 °C?",
+                "expected": "YES",
+                "raw_yes_pct": 82.17087984085083,
+                "raw_no_pct": 17.77070015668869,
+                "other_token_pct": 0.058420002460479736,
+                "yes_pct_given_yes_or_no": 82.21884965896606,
+                "no_pct_given_yes_or_no": 17.781074345111847,
+                "choice": "YES",
+                "seconds": 11.808434625003429
+              },
+              {
+                "id": "rain_over_90",
+                "question": "Did the tool return a precipitation probability above 90%?",
+                "expected": "NO",
+                "raw_yes_pct": 1.936193427809485e-07,
+                "raw_no_pct": 99.99580383300781,
+                "other_token_pct": 0.004195973372844719,
+                "yes_pct_given_yes_or_no": 1.9362746961348876e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 12.061221834002936
+              },
+              {
+                "id": "answer_70_percent",
+                "question": "Did the final answer mention a 70% precipitation probability?",
+                "expected": "YES",
+                "raw_yes_pct": 99.97329711914062,
+                "raw_no_pct": 0.0007409355930576567,
+                "other_token_pct": 0.025961945266317343,
+                "yes_pct_given_yes_or_no": 99.9992311000824,
+                "no_pct_given_yes_or_no": 0.0007411278147628764,
+                "choice": "YES",
+                "seconds": 12.064858666002692
+              },
+              {
+                "id": "live_source",
+                "question": "Was the tool output from a live Open-Meteo call?",
+                "expected": "NO",
+                "raw_yes_pct": 5.51584911079317e-07,
+                "raw_no_pct": 99.99847412109375,
+                "other_token_pct": 0.0015253273213389207,
+                "yes_pct_given_yes_or_no": 5.515933043653831e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 12.825796375000209
+              },
+              {
+                "id": "satisfied_units",
+                "question": "Did the final answer satisfy the user's requested temperature units?",
+                "expected": "NO",
+                "raw_yes_pct": 0.012731074821203947,
+                "raw_no_pct": 99.98703002929688,
+                "other_token_pct": 0.00023889588192105293,
+                "yes_pct_given_yes_or_no": 0.0127311228425242,
+                "no_pct_given_yes_or_no": 99.98741149902344,
+                "choice": "NO",
+                "seconds": 11.275171833003697
+              },
+              {
+                "id": "tool_error",
+                "question": "Did the forecast tool return an error?",
+                "expected": "NO",
+                "raw_yes_pct": 1.790665726808527e-07,
+                "raw_no_pct": 99.99465346336365,
+                "other_token_pct": 0.005346357569779858,
+                "yes_pct_given_yes_or_no": 1.7907614280332496e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 11.623308874994109
+              }
+            ]
+          },
+          "cached": {
+            "total_seconds": 0.6776620829987223,
+            "prefill_seconds": 0.0,
+            "rows": [
+              {
+                "id": "requested_fahrenheit",
+                "question": "Did the user explicitly request Fahrenheit?",
+                "expected": "YES",
+                "raw_yes_pct": 98.1957197189331,
+                "raw_no_pct": 1.0278540685249027e-06,
+                "other_token_pct": 1.804279253212826,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 1.0467402056235642e-06,
+                "choice": "YES",
+                "seconds": 0.0721431250058231
+              },
+              {
+                "id": "answered_fahrenheit",
+                "question": "Did the final answer give the temperature in Fahrenheit?",
+                "expected": "NO",
+                "raw_yes_pct": 0.05193032557144761,
+                "raw_no_pct": 99.94775056838989,
+                "other_token_pct": 0.000319106038659811,
+                "yes_pct_given_yes_or_no": 0.051930517656728625,
+                "no_pct_given_yes_or_no": 99.94813203811646,
+                "choice": "NO",
+                "seconds": 0.0672183339993353
+              },
+              {
+                "id": "called_forecast",
+                "question": "Did the agent call get_forecast?",
+                "expected": "YES",
+                "raw_yes_pct": 99.83496069908142,
+                "raw_no_pct": 0.00019914416498068022,
+                "other_token_pct": 0.16484015675359842,
+                "yes_pct_given_yes_or_no": 99.99961256980896,
+                "no_pct_given_yes_or_no": 0.00019947260625485796,
+                "choice": "YES",
+                "seconds": 0.06697524999617599
+              },
+              {
+                "id": "city_berlin",
+                "question": "Was the forecast tool called for Berlin, Germany?",
+                "expected": "YES",
+                "raw_yes_pct": 99.94279742240906,
+                "raw_no_pct": 0.0006536738965223776,
+                "other_token_pct": 0.056548903694420005,
+                "yes_pct_given_yes_or_no": 99.9992311000824,
+                "no_pct_given_yes_or_no": 0.0006540430604218272,
+                "choice": "YES",
+                "seconds": 0.06673154199961573
+              },
+              {
+                "id": "temperature_14c",
+                "question": "Did the tool return a maximum temperature of 14 °C?",
+                "expected": "YES",
+                "raw_yes_pct": 82.170569896698,
+                "raw_no_pct": 17.770633101463318,
+                "other_token_pct": 0.05879700183868408,
+                "yes_pct_given_yes_or_no": 82.21884965896606,
+                "no_pct_given_yes_or_no": 17.781074345111847,
+                "choice": "YES",
+                "seconds": 0.06737879200227326
+              },
+              {
+                "id": "rain_over_90",
+                "question": "Did the tool return a precipitation probability above 90%?",
+                "expected": "NO",
+                "raw_yes_pct": 1.9061827671862375e-07,
+                "raw_no_pct": 99.99618530273438,
+                "other_token_pct": 0.0038145066473482814,
+                "yes_pct_given_yes_or_no": 1.906255597816653e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.06734550000692252
+              },
+              {
+                "id": "answer_70_percent",
+                "question": "Did the final answer mention a 70% precipitation probability?",
+                "expected": "YES",
+                "raw_yes_pct": 99.97254014015198,
+                "raw_no_pct": 0.0007887158972152974,
+                "other_token_pct": 0.026671143950807163,
+                "yes_pct_given_yes_or_no": 99.9992311000824,
+                "no_pct_given_yes_or_no": 0.0007889265361882281,
+                "choice": "YES",
+                "seconds": 0.06759720799891511
+              },
+              {
+                "id": "live_source",
+                "question": "Was the tool output from a live Open-Meteo call?",
+                "expected": "NO",
+                "raw_yes_pct": 5.780560030643755e-07,
+                "raw_no_pct": 99.99847412109375,
+                "other_token_pct": 0.0015253008502469356,
+                "yes_pct_given_yes_or_no": 5.780648404396516e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.06758975000411738
+              },
+              {
+                "id": "satisfied_units",
+                "question": "Did the final answer satisfy the user's requested temperature units?",
+                "expected": "NO",
+                "raw_yes_pct": 0.013135152403265238,
+                "raw_no_pct": 99.98664855957031,
+                "other_token_pct": 0.0002162880264222622,
+                "yes_pct_given_yes_or_no": 0.013135201879777014,
+                "no_pct_given_yes_or_no": 99.98703002929688,
+                "choice": "NO",
+                "seconds": 0.06754000000364613
+              },
+              {
+                "id": "tool_error",
+                "question": "Did the forecast tool return an error?",
+                "expected": "NO",
+                "raw_yes_pct": 1.7906726101912795e-07,
+                "raw_no_pct": 99.99503493309021,
+                "other_token_pct": 0.00496488784252902,
+                "yes_pct_given_yes_or_no": 1.7907614280332496e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.0671158339973772
+              }
+            ]
+          }
+        },
+        {
+          "round": 2,
+          "order": [
+            "cached",
+            "cold"
+          ],
+          "cached": {
+            "total_seconds": 0.671791792003205,
+            "prefill_seconds": 0.0,
+            "rows": [
+              {
+                "id": "requested_fahrenheit",
+                "question": "Did the user explicitly request Fahrenheit?",
+                "expected": "YES",
+                "raw_yes_pct": 98.1957197189331,
+                "raw_no_pct": 1.0278540685249027e-06,
+                "other_token_pct": 1.804279253212826,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 1.0467402056235642e-06,
+                "choice": "YES",
+                "seconds": 0.06666970800142735
+              },
+              {
+                "id": "answered_fahrenheit",
+                "question": "Did the final answer give the temperature in Fahrenheit?",
+                "expected": "NO",
+                "raw_yes_pct": 0.05193032557144761,
+                "raw_no_pct": 99.94775056838989,
+                "other_token_pct": 0.000319106038659811,
+                "yes_pct_given_yes_or_no": 0.051930517656728625,
+                "no_pct_given_yes_or_no": 99.94813203811646,
+                "choice": "NO",
+                "seconds": 0.06672516599792289
+              },
+              {
+                "id": "called_forecast",
+                "question": "Did the agent call get_forecast?",
+                "expected": "YES",
+                "raw_yes_pct": 99.83496069908142,
+                "raw_no_pct": 0.00019914416498068022,
+                "other_token_pct": 0.16484015675359842,
+                "yes_pct_given_yes_or_no": 99.99961256980896,
+                "no_pct_given_yes_or_no": 0.00019947260625485796,
+                "choice": "YES",
+                "seconds": 0.06734775000222726
+              },
+              {
+                "id": "city_berlin",
+                "question": "Was the forecast tool called for Berlin, Germany?",
+                "expected": "YES",
+                "raw_yes_pct": 99.94279742240906,
+                "raw_no_pct": 0.0006536738965223776,
+                "other_token_pct": 0.056548903694420005,
+                "yes_pct_given_yes_or_no": 99.9992311000824,
+                "no_pct_given_yes_or_no": 0.0006540430604218272,
+                "choice": "YES",
+                "seconds": 0.0669191669949214
+              },
+              {
+                "id": "temperature_14c",
+                "question": "Did the tool return a maximum temperature of 14 °C?",
+                "expected": "YES",
+                "raw_yes_pct": 82.170569896698,
+                "raw_no_pct": 17.770633101463318,
+                "other_token_pct": 0.05879700183868408,
+                "yes_pct_given_yes_or_no": 82.21884965896606,
+                "no_pct_given_yes_or_no": 17.781074345111847,
+                "choice": "YES",
+                "seconds": 0.06739666700013913
+              },
+              {
+                "id": "rain_over_90",
+                "question": "Did the tool return a precipitation probability above 90%?",
+                "expected": "NO",
+                "raw_yes_pct": 1.9061827671862375e-07,
+                "raw_no_pct": 99.99618530273438,
+                "other_token_pct": 0.0038145066473482814,
+                "yes_pct_given_yes_or_no": 1.906255597816653e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.06750370800000383
+              },
+              {
+                "id": "answer_70_percent",
+                "question": "Did the final answer mention a 70% precipitation probability?",
+                "expected": "YES",
+                "raw_yes_pct": 99.97254014015198,
+                "raw_no_pct": 0.0007887158972152974,
+                "other_token_pct": 0.026671143950807163,
+                "yes_pct_given_yes_or_no": 99.9992311000824,
+                "no_pct_given_yes_or_no": 0.0007889265361882281,
+                "choice": "YES",
+                "seconds": 0.06722233299660729
+              },
+              {
+                "id": "live_source",
+                "question": "Was the tool output from a live Open-Meteo call?",
+                "expected": "NO",
+                "raw_yes_pct": 5.780560030643755e-07,
+                "raw_no_pct": 99.99847412109375,
+                "other_token_pct": 0.0015253008502469356,
+                "yes_pct_given_yes_or_no": 5.780648404396516e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.06737012500525452
+              },
+              {
+                "id": "satisfied_units",
+                "question": "Did the final answer satisfy the user's requested temperature units?",
+                "expected": "NO",
+                "raw_yes_pct": 0.013135152403265238,
+                "raw_no_pct": 99.98664855957031,
+                "other_token_pct": 0.0002162880264222622,
+                "yes_pct_given_yes_or_no": 0.013135201879777014,
+                "no_pct_given_yes_or_no": 99.98703002929688,
+                "choice": "NO",
+                "seconds": 0.0676872080002795
+              },
+              {
+                "id": "tool_error",
+                "question": "Did the forecast tool return an error?",
+                "expected": "NO",
+                "raw_yes_pct": 1.7906726101912795e-07,
+                "raw_no_pct": 99.99503493309021,
+                "other_token_pct": 0.00496488784252902,
+                "yes_pct_given_yes_or_no": 1.7907614280332496e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 0.06692583300173283
+              }
+            ]
+          },
+          "cold": {
+            "total_seconds": 113.78652699999657,
+            "prefill_seconds": 0.0,
+            "rows": [
+              {
+                "id": "requested_fahrenheit",
+                "question": "Did the user explicitly request Fahrenheit?",
+                "expected": "YES",
+                "raw_yes_pct": 98.25004935264587,
+                "raw_no_pct": 9.967815017830617e-07,
+                "other_token_pct": 1.7499496505726242,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 1.0145353890322895e-06,
+                "choice": "YES",
+                "seconds": 10.85236179200001
+              },
+              {
+                "id": "answered_fahrenheit",
+                "question": "Did the final answer give the temperature in Fahrenheit?",
+                "expected": "NO",
+                "raw_yes_pct": 0.05357774789445102,
+                "raw_no_pct": 99.94584321975708,
+                "other_token_pct": 0.0005790323484688997,
+                "yes_pct_given_yes_or_no": 0.053578155348077416,
+                "no_pct_given_yes_or_no": 99.9466061592102,
+                "choice": "NO",
+                "seconds": 10.975499749998562
+              },
+              {
+                "id": "called_forecast",
+                "question": "Did the agent call get_forecast?",
+                "expected": "YES",
+                "raw_yes_pct": 99.83000159263611,
+                "raw_no_pct": 0.00019604699446063023,
+                "other_token_pct": 0.16980236036943097,
+                "yes_pct_given_yes_or_no": 100.0,
+                "no_pct_given_yes_or_no": 0.00019638082449091598,
+                "choice": "YES",
+                "seconds": 11.998364249993756
+              },
+              {
+                "id": "city_berlin",
+                "question": "Was the forecast tool called for Berlin, Germany?",
+                "expected": "YES",
+                "raw_yes_pct": 99.94164705276489,
+                "raw_no_pct": 0.000643532257527113,
+                "other_token_pct": 0.05770941497758031,
+                "yes_pct_given_yes_or_no": 99.9992311000824,
+                "no_pct_given_yes_or_no": 0.0006439030130422907,
+                "choice": "YES",
+                "seconds": 11.471030166001583
+              },
+              {
+                "id": "temperature_14c",
+                "question": "Did the tool return a maximum temperature of 14 °C?",
+                "expected": "YES",
+                "raw_yes_pct": 82.17087984085083,
+                "raw_no_pct": 17.77070015668869,
+                "other_token_pct": 0.058420002460479736,
+                "yes_pct_given_yes_or_no": 82.21884965896606,
+                "no_pct_given_yes_or_no": 17.781074345111847,
+                "choice": "YES",
+                "seconds": 11.14949816599983
+              },
+              {
+                "id": "rain_over_90",
+                "question": "Did the tool return a precipitation probability above 90%?",
+                "expected": "NO",
+                "raw_yes_pct": 1.936193427809485e-07,
+                "raw_no_pct": 99.99580383300781,
+                "other_token_pct": 0.004195973372844719,
+                "yes_pct_given_yes_or_no": 1.9362746961348876e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 10.801368749998801
+              },
+              {
+                "id": "answer_70_percent",
+                "question": "Did the final answer mention a 70% precipitation probability?",
+                "expected": "YES",
+                "raw_yes_pct": 99.97329711914062,
+                "raw_no_pct": 0.0007409355930576567,
+                "other_token_pct": 0.025961945266317343,
+                "yes_pct_given_yes_or_no": 99.9992311000824,
+                "no_pct_given_yes_or_no": 0.0007411278147628764,
+                "choice": "YES",
+                "seconds": 11.186517666996224
+              },
+              {
+                "id": "live_source",
+                "question": "Was the tool output from a live Open-Meteo call?",
+                "expected": "NO",
+                "raw_yes_pct": 5.51584911079317e-07,
+                "raw_no_pct": 99.99847412109375,
+                "other_token_pct": 0.0015253273213389207,
+                "yes_pct_given_yes_or_no": 5.515933043653831e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 11.190363375004381
+              },
+              {
+                "id": "satisfied_units",
+                "question": "Did the final answer satisfy the user's requested temperature units?",
+                "expected": "NO",
+                "raw_yes_pct": 0.012731074821203947,
+                "raw_no_pct": 99.98703002929688,
+                "other_token_pct": 0.00023889588192105293,
+                "yes_pct_given_yes_or_no": 0.0127311228425242,
+                "no_pct_given_yes_or_no": 99.98741149902344,
+                "choice": "NO",
+                "seconds": 12.215997375002189
+              },
+              {
+                "id": "tool_error",
+                "question": "Did the forecast tool return an error?",
+                "expected": "NO",
+                "raw_yes_pct": 1.790665726808527e-07,
+                "raw_no_pct": 99.99465346336365,
+                "other_token_pct": 0.005346357569779858,
+                "yes_pct_given_yes_or_no": 1.7907614280332496e-07,
+                "no_pct_given_yes_or_no": 100.0,
+                "choice": "NO",
+                "seconds": 11.945506791998923
+              }
+            ]
+          }
+        }
+      ],
+      "summary": {
+        "cold_median_seconds": 117.66940297899782,
+        "cached_median_seconds_including_prefill": null,
+        "cached_median_seconds_warm": 0.6747269375009637,
+        "cached_median_seconds_amortized_prefill": 6.037313646003895,
+        "cached_prefill_median_seconds": 0.0,
+        "speedup": 174.3955909257436,
+        "speedup_amortized_prefill": 19.490357778062986,
+        "first_cached_round_seconds_including_one_time_prefill": 11.402835500004585,
+        "cold_correct": 10,
+        "cached_correct": 10,
+        "max_cold_cached_yes_pct_delta_points": 0.0016476376913487911
+      }
+    }
+  },
+  "comparison": {
+    "shared_prefix_token_ratio": 9.319767441860465,
+    "short_warm_cache_speedup": 24.203490908421504,
+    "long_warm_cache_speedup": 174.3955909257436,
+    "speedup_ratio_long_over_short": 7.205389982197294
+  }
+}

@@ -3,9 +3,10 @@
 Checkpoint: `git checkout ex5-start` (create your own branch before editing).
 
 This builds on Exercise 3's flagged `p2` trace. It uses a local MLX model to
-score the next-token chance of `YES` and `NO` for ten questions about the same trace. The questions cover tool use,
-arguments, grounding, source, and whether the final answer met the user's
-requested units. Expected labels are in `scripts/judge_cache_benchmark.py`.
+score the next-token chance of `YES` and `NO` for ten questions about the same
+trace. The questions cover tool use, arguments, grounding, source, and whether
+the final answer met the user's requested units. Expected labels are in
+`scripts/judge_cache_benchmark.py`.
 Run this on `main`, where `p2` intentionally still has the Fahrenheit failure.
 If you change the agent or trace, update the expected labels before using the
 accuracy number as a quality check.
@@ -25,9 +26,9 @@ uv run python scripts/production_batch.py
 uv run python scripts/judge_token_probabilities.py
 ```
 
-The report is written to `results/judge_token_probabilities.json`. It excludes model load
-and tokenization from the timing, but includes the cached path's one-time
-prefill and per-question cache copies. Two rounds reverse the run order.
+The report is written to `results/judge_token_probabilities.json`. It excludes
+model load and tokenization from the timing, but includes the cached path's
+one-time prefill and per-question cache copies. Two rounds reverse the run order.
 `YES` and `NO` are each a single token in the default model. The script checks
 this and stops if a different tokenizer requires scoring multiple tokens.
 
@@ -63,6 +64,49 @@ For example, the question about the tool returning 14 °C scored **95.40% YES**
 and **4.60% NO** after forced-choice normalization. The raw next-token
 probabilities were **95.26% YES**, **4.60% NO**, and **0.14% other tokens**.
 The full report contains all ten questions and both sets of percentages.
+
+## Longer trace and a warm cache
+
+Run the comparison with the same 7B model loaded once:
+
+```bash
+uv run python scripts/judge_long_trace_benchmark.py --long-spans 32 --rounds 2
+```
+
+The [long-trace report](../results/judge_long_trace_comparison.json) compares
+the original **860-token** shared prefix with an **8,015-token** prefix. The
+larger case adds 32 deterministic, synthetic trace-shaped context spans to the
+same `p2` evidence. They resemble repeated request, tool, and review payloads
+in a full agent trace; this is a timing fixture, not a captured production
+trace. The ten question suffixes remain 14–21 tokens. Both cases run in one
+process with the model on the MLX GPU device.
+
+| Ten judgments | 860-token prefix | 8,015-token prefix |
+|---|---:|---:|
+| Reprocess the full prompt for each question | 11.45 s | 117.67 s |
+| Score ten questions with the prefix already cached | 0.47 s | 0.67 s |
+| One-time prefix prefill | 0.85 s | 10.73 s |
+| First cached batch including prefill | 1.33 s | 11.40 s |
+| Speedup once the cache is warm | 24.20× | 174.40× |
+
+For the long trace, the **first** cached batch was about **10.3× faster** even
+after paying for prefill. Across the two measured cached batches, amortizing
+that one prefill gives about **6.04 s per batch**, or **19.49×** versus cold.
+The two runs reverse the cold/cached order. The prefix cache is materialized
+once after warm-up, kept alive across both rounds, and copied for each question;
+copy time is included in the cached timings. The long prefix cache used about
+**0.47 GB**; active MLX memory after prefill was **4.76 GB**, and peak process
+memory was about **8.80 GB**. Cold and cached
+paths chose the expected answer for all ten questions, and their normalized
+YES percentages differed by at most **0.00165 percentage points**.
+
+MLX uses [unified memory on Apple Silicon](https://ml-explore.github.io/mlx/build/html/usage/unified_memory.html):
+CPU and GPU operations access the same memory pool rather than transferring
+arrays between separate RAM and GPU memory. The script explicitly selects the
+GPU, evaluates the cache before timing, synchronizes execution, keeps the model
+and shared cache resident in the same process, and does no cache serialization
+between rounds. These measurements isolate this local fixture and hardware;
+long traces with different structure or memory pressure may behave differently.
 
 The earlier [generation benchmark](../results/judge_kv_cache.json) and its
 [`judge_cache_benchmark.py`](../scripts/judge_cache_benchmark.py) command remain

@@ -19,7 +19,55 @@ ROOT = Path(__file__).resolve().parents[1]
 os.environ.setdefault("HF_HOME", str(ROOT / ".cache" / "huggingface"))
 
 
-def run_benchmark(model_name: str, query_id: str, rounds: int) -> dict:
+def add_synthetic_trace_spans(evidence: dict, count: int) -> dict:
+    """Add deterministic trace-shaped context without changing the p2 facts.
+
+    These spans model the repeated prompt, tool, and validation payloads often
+    present in an agent trace. They are synthetic and are only for timing.
+    """
+    if count < 0:
+        raise ValueError("Synthetic span count cannot be negative")
+    if not count:
+        return evidence
+    evidence = copy.deepcopy(evidence)
+    phases = ("request intake", "tool planning", "forecast lookup", "tool response",
+              "answer draft", "answer review")
+    for index in range(count):
+        evidence.setdefault("synthetic_trace_spans", []).append({
+            "span_id": f"synthetic-context-{index:03d}",
+            "name": f"agent.{phases[index % len(phases)].replace(' ', '_')}",
+            "sequence": index + 1,
+            "attributes": {
+                "user_request_snapshot": (
+                    "The user asks whether an umbrella is needed in Berlin, Germany "
+                    "tomorrow and explicitly asks for the temperature in Fahrenheit. "
+                    "This is a recorded workshop case, not a live weather request."
+                ),
+                "agent_context": (
+                    "The agent should use the weather tool result as its source, "
+                    "distinguish tool arguments from tool output, and avoid claiming "
+                    "that an illustrative fixture is a live observation. The response "
+                    "should answer the umbrella question, report precipitation clearly, "
+                    "and respect the requested temperature units."
+                ),
+                "recorded_observation": (
+                    "The get_forecast call for Berlin, Germany returned a maximum "
+                    "temperature of 14 degrees Celsius and a precipitation probability "
+                    "of 70 percent. The tool returned a normal result, not an error."
+                ),
+                "quality_note": (
+                    "A final answer in Celsius would miss the user's Fahrenheit "
+                    "requirement even if its precipitation advice and tool call are "
+                    "otherwise grounded in the recorded result."
+                ),
+            },
+        })
+    return evidence
+
+
+def run_benchmark(model_name: str, query_id: str, rounds: int, *,
+                  synthetic_spans: int = 0, loaded_model=None,
+                  keep_prefix_warm: bool = False) -> dict:
     try:
         import mlx.core as mx
         from mlx_lm import load
@@ -27,11 +75,17 @@ def run_benchmark(model_name: str, query_id: str, rounds: int) -> dict:
     except ImportError as exc:
         raise SystemExit("Install the optional dependency: uv sync --extra eval --extra mlx") from exc
 
+    mx.set_default_device(mx.gpu)
     evidence, trace_id = load_evidence(query_id)
+    evidence = add_synthetic_trace_spans(evidence, synthetic_spans)
     evidence_text = json.dumps(evidence, ensure_ascii=False, sort_keys=True, indent=2)
-    load_start = time.perf_counter()
-    model, tokenizer = load(model_name)
-    model_load_seconds = time.perf_counter() - load_start
+    if loaded_model is None:
+        load_start = time.perf_counter()
+        model, tokenizer = load(model_name)
+        model_load_seconds = time.perf_counter() - load_start
+    else:
+        model, tokenizer = loaded_model
+        model_load_seconds = 0.0
 
     label_tokens = {label: tokenizer.encode(label, add_special_tokens=False)
                     for label in ("YES", "NO")}
@@ -78,6 +132,23 @@ def run_benchmark(model_name: str, query_id: str, rounds: int) -> dict:
 
     # Compile the model and scoring operations before either timed path.
     evaluate(prompts[0], make_prompt_cache(model))
+    mx.synchronize()
+
+    shared_base = None
+    shared_prefill_seconds = 0.0
+    shared_cache_bytes = 0
+    active_memory_after_prefill_gb = None
+    if keep_prefix_warm:
+        start = time.perf_counter()
+        shared_base = make_prompt_cache(model)
+        model(mx.array(shared, dtype=mx.int32)[None], cache=shared_base)
+        mx.eval([item.state for item in shared_base])
+        mx.synchronize()
+        shared_prefill_seconds = time.perf_counter() - start
+        if shared_base[0].offset != len(shared):
+            raise RuntimeError("Shared prefix cache has an unexpected offset")
+        shared_cache_bytes = sum(item.nbytes for item in shared_base)
+        active_memory_after_prefill_gb = mx.get_active_memory() / 1e9
 
     def cold_round() -> dict:
         rows = []
@@ -92,10 +163,13 @@ def run_benchmark(model_name: str, query_id: str, rounds: int) -> dict:
 
     def cached_round() -> dict:
         start = time.perf_counter()
-        base = make_prompt_cache(model)
-        model(mx.array(shared, dtype=mx.int32)[None], cache=base)
-        mx.eval([item.state for item in base])
-        prefill_seconds = time.perf_counter() - start
+        base = shared_base if keep_prefix_warm else make_prompt_cache(model)
+        if not keep_prefix_warm:
+            model(mx.array(shared, dtype=mx.int32)[None], cache=base)
+            mx.eval([item.state for item in base])
+            prefill_seconds = time.perf_counter() - start
+        else:
+            prefill_seconds = 0.0
         if base[0].offset != len(shared):
             raise RuntimeError(f"Prefix cache has {base[0].offset} tokens, expected {len(shared)}")
         rows = []
@@ -132,15 +206,33 @@ def run_benchmark(model_name: str, query_id: str, rounds: int) -> dict:
         "mlx_version": importlib.metadata.version("mlx"),
         "platform": platform.platform(), "model_load_seconds": model_load_seconds,
         "peak_process_memory_gb": mx.get_peak_memory() / 1e9,
+        "execution_device": str(mx.default_device()),
+        "synthetic_trace_spans": synthetic_spans,
+        "shared_cache_kept_warm_across_rounds": keep_prefix_warm,
+        "shared_prefill_seconds_once": shared_prefill_seconds,
+        "shared_cache_gb": shared_cache_bytes / 1e9,
+        "active_memory_after_prefill_gb": active_memory_after_prefill_gb,
         "label_token_ids": {key: value[0] for key, value in label_tokens.items()},
         "shared_prefix_tokens": len(shared), "full_prompt_tokens": [len(p) for p in prompts],
         "tail_tokens": [len(t) for t in tails], "rounds": runs,
         "summary": {
             "cold_median_seconds": statistics.median(cold_times),
-            "cached_median_seconds_including_prefill": statistics.median(cached_times),
+            "cached_median_seconds_including_prefill": (
+                statistics.median(cached_times) if not keep_prefix_warm else None),
+            "cached_median_seconds_warm": (
+                statistics.median(cached_times) if keep_prefix_warm else None),
+            "cached_median_seconds_amortized_prefill": (
+                statistics.median(cached_times) + shared_prefill_seconds / rounds
+                if keep_prefix_warm else statistics.median(cached_times)),
             "cached_prefill_median_seconds": statistics.median(
                 run["cached"]["prefill_seconds"] for run in runs),
             "speedup": statistics.median(cold_times) / statistics.median(cached_times),
+            "speedup_amortized_prefill": (
+                statistics.median(cold_times) /
+                (statistics.median(cached_times) + shared_prefill_seconds / rounds)),
+            "first_cached_round_seconds_including_one_time_prefill": (
+                runs[0]["cached"]["total_seconds"] + shared_prefill_seconds
+                if keep_prefix_warm else runs[0]["cached"]["total_seconds"]),
             "cold_correct": sum(row["choice"] == row["expected"] for row in last_cold),
             "cached_correct": sum(row["choice"] == row["expected"] for row in last_cached),
             "max_cold_cached_yes_pct_delta_points": max_delta,
@@ -153,12 +245,18 @@ def main() -> None:
     parser.add_argument("--model", default="mlx-community/Qwen2.5-7B-Instruct-4bit")
     parser.add_argument("--query-id", default="p2")
     parser.add_argument("--rounds", type=int, default=2)
+    parser.add_argument("--synthetic-spans", type=int, default=0,
+                        help="Add deterministic trace-shaped context for timing")
+    parser.add_argument("--keep-prefix-warm", action="store_true",
+                        help="Prefill once before timing and reuse the cache across rounds")
     parser.add_argument("--output", type=Path,
                         default=ROOT / "results" / "judge_token_probabilities.json")
     args = parser.parse_args()
-    if args.rounds < 1:
-        parser.error("--rounds must be positive")
-    report = run_benchmark(args.model, args.query_id, args.rounds)
+    if args.rounds < 1 or args.synthetic_spans < 0:
+        parser.error("--rounds must be positive and --synthetic-spans nonnegative")
+    report = run_benchmark(args.model, args.query_id, args.rounds,
+                           synthetic_spans=args.synthetic_spans,
+                           keep_prefix_warm=args.keep_prefix_warm)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
     print("\nQuestion                              raw YES %  raw NO %  YES|labels %  "
