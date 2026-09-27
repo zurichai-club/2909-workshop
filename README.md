@@ -67,6 +67,7 @@ weather advice.
 2. [Mutation testing](exercises/02-mutation.md) — `ex2-start`
 3. [Observability](exercises/03-observability.md) — `ex3-start`
 4. [Close the loop](exercises/04-close-loop.md) — `ex4-start`
+5. [Advanced LLM judge and KV cache](exercises/05-advanced-judge.md) — optional extension
 
 Each tag is a checkpoint in this nested repository. The `solutions` branch
 adds a unit assertion and a Fahrenheit fix. Return to `main` after exploring
@@ -84,6 +85,15 @@ The local stack follows [Langfuse's Docker Compose deployment](https://langfuse.
 and sends authenticated [OTLP/HTTP spans](https://langfuse.com/integrations/native/opentelemetry).
 The tool uses the [Open-Meteo forecast](https://open-meteo.com/en/docs) and
 [geocoding](https://open-meteo.com/en/docs/geocoding-api) APIs.
+
+The optional fifth exercise runs ten yes/no trace judgments on a local MLX
+model. It benchmarks full prompt processing against a precomputed shared
+prefix, while keeping the original four exercises and their checkpoint tags
+unchanged. Install it with `uv sync --extra eval --extra mlx`; it requires
+Apple Silicon and a working Metal device.
+The [local 7B benchmark](results/judge_kv_cache.json) measured 11.06 s cold
+versus 2.35 s with cache reuse for ten judgments (4.71×), with matching
+answers on this workshop trace.
 
 To stop without deleting traces: `docker compose stop`. To restart:
 `docker compose up -d`. Only use `docker compose down -v` when you intend to

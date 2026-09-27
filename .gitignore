@@ -4,6 +4,7 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .deepeval/
+.cache/
 traces.jsonl
 batch.jsonl
 captured_case.json
