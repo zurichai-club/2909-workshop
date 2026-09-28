@@ -12,8 +12,21 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-eval = ["deepeval>=3,<4"]
+eval = [
+    "deepeval>=3,<4",
+]
 mlx = ["mlx-lm==0.31.3"]
 
-[tool.uv]
-package = false
+# Install workshop_support (the shared tool and tracing code), so every exercise can import it.
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["workshop_support"]
+
+[tool.pytest.ini_options]
+# DeepEval's pytest plugin imports deepeval before test_golden.py can switch off its telemetry.
+# assert_test works without the plugin.
+addopts = "-p no:deepeval"
+filterwarnings = ["ignore::DeprecationWarning"]  # from inside deepeval

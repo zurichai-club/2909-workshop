@@ -1,23 +1,32 @@
 """Mutation testing: break the agent on purpose and check that the golden set notices."""
 
+import os
+import subprocess
 import sys
 
-from eval_golden import run_golden_set
-from weather_agent.agent import SYSTEM_PROMPT, UNITS_RULE
+from agent import SYSTEM_PROMPT, UNITS_RULE
 
 # The mutant: the same agent with the units rule removed from its prompt.
 MUTANT_PROMPT = SYSTEM_PROMPT.replace(UNITS_RULE, "")
 
-print("Baseline (original prompt):")
-baseline_failures = run_golden_set(SYSTEM_PROMPT)
 
-print("\nMutant (units rule removed):")
-mutant_failures = run_golden_set(MUTANT_PROMPT)
+def golden_set_passes(system_prompt):
+    """Run test_golden.py with pytest, using this system prompt. True when every test passed."""
+    env = dict(os.environ, SYSTEM_PROMPT=system_prompt)
+    completed = subprocess.run([sys.executable, "-m", "pytest", "-q", "test_golden.py"], env=env)
+    return completed.returncode == 0
 
-# The mutant is "killed" when a test that passed on the baseline now fails.
-if baseline_failures == 0 and mutant_failures > 0:
+
+print("Baseline (original prompt):", flush=True)
+baseline_passes = golden_set_passes(SYSTEM_PROMPT)
+
+print("\nMutant (units rule removed):", flush=True)
+mutant_passes = golden_set_passes(MUTANT_PROMPT)
+
+# The mutant is "killed" when the golden set passed on the baseline but fails on the mutant.
+if baseline_passes and not mutant_passes:
     print("\nMutation score: 1/1 -- killed. The golden set caught the broken prompt.")
 else:
     print("\nMutation score: 0/1 -- survived. No golden case noticed the broken prompt.")
 
-sys.exit(1 if baseline_failures else 0)
+sys.exit(0 if baseline_passes else 1)

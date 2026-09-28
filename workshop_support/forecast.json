@@ -1,0 +1,6 @@
+{
+  "berlin, germany": {"temperature_max_c": 14, "precipitation_mm": 2.1, "precipitation_probability_pct": 70},
+  "zurich, switzerland": {"temperature_max_c": 18, "precipitation_mm": 0, "precipitation_probability_pct": 10},
+  "oslo, norway": {"temperature_max_c": 9, "precipitation_mm": 0.4, "precipitation_probability_pct": 35},
+  "paris, france": {"temperature_max_c": 21, "precipitation_mm": 0, "precipitation_probability_pct": 5}
+}

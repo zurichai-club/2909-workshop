@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from weather_agent.agent import run_agent
+from agent import run_agent
 
 BATCH_FILE = Path(__file__).parent / "batch.jsonl"
 

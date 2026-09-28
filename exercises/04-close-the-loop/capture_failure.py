@@ -1,4 +1,4 @@
-"""Turn a flagged production run into a golden case.
+"""Show a flagged production run: everything you need to write a golden test for it.
 
     python capture_failure.py p2
 """
@@ -18,23 +18,12 @@ def find_batch_row(query_id):
     sys.exit(f"No run with query id {query_id} in batch.jsonl")
 
 
-query_id = sys.argv[1]
-row = find_batch_row(query_id)
-if not row["flag"]:
-    sys.exit("This run is not flagged; triage it before capturing it")
-
+row = find_batch_row(sys.argv[1])
 call = row["tool_calls"][0]
-case = {
-    "id": f"production-{query_id}",
-    "input": row["input"],
-    "expected_tool": call["name"],
-    "expected_city": call["arguments"]["city"],
-    "date_offset": 1,
-    "answer_contains": ["°F"],
-    "source_trace_id": row["trace_id"],        # why this case exists
-    "recorded_tool_output": call["output"],    # replay the exact data the agent saw
-}
 
-destination = HERE / "captured_case.json"
-destination.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
-print(f"Review {destination.name}, then append the case to golden.json")
+print("question:   ", row["input"])
+print("answer:     ", row["answer"])
+print("flag:       ", row["flag"])
+print("trace ID:   ", row["trace_id"])
+print("tool call:  ", call["name"], json.dumps(call["arguments"]))
+print("tool output:", json.dumps(call["output"], ensure_ascii=False))
