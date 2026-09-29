@@ -108,6 +108,8 @@ def mock_plan(question):
         day = today + datetime.timedelta(days=21)
     elif "tomorrow" in q:
         day = today + datetime.timedelta(days=1)
+    elif "yesterday" in q:
+        day = today - datetime.timedelta(days=1)
     elif "today" in q:
         day = today
     else:
